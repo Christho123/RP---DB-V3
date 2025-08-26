@@ -3,7 +3,7 @@
 Estas son tablas maestras o catálogos que sirven de base para otras entidades.  
 No dependen de otras tablas mediante llaves foráneas.
 
-### Tabla `company_data`
+### Tabla `table_company_data`
 
 |   Atributos     |   Tipo de Dato  |              Restricciones                      |
 |-----------------|-----------------|-------------------------------------------------|
