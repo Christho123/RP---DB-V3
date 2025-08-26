@@ -1,8 +1,10 @@
-# 📌 Tablas y Relaciones (PK y FK)
+# 🗄️ Tablas Independientes
 
-
+Estas son tablas maestras o catálogos que sirven de base para otras entidades.  
+No dependen de otras tablas mediante llaves foráneas.
 
 ### Tabla `company_data`
+
 |   Atributos     |   Tipo de Dato  |              Restricciones                      |
 |-----------------|-----------------|-------------------------------------------------|
 | id              | INT             | PRIMARY KEY, AUTO_INCREMENT                     |
@@ -10,7 +12,10 @@
 | company_logo    | VARCHAR(255)    | NULL                                            |
 | created_at      | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP                       |
 | updated_at      | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
-
+---
+- 🔑 **PK:** `id`
+- 📌 Información general de la empresa.
+- ⚡ Sin llaves foráneas.
 ---
 
 ### Tabla `appointment_statuses`
@@ -24,7 +29,11 @@
 | is_active       | TINYINT(1)      | NULL                                             |
 
 ---
-
+- 🔑 **PK:** `id`
+- 📌 Define los diferentes **estados de las citas**.
+- ⚡ Sin llaves foráneas.
+- ✔️ Campo importante: `is_active`.
+---
 ### Tabla `roles`
 |   Atributos     |   Tipo de Dato  |              Restricciones                      |
 |-----------------|-----------------|-------------------------------------------------|
@@ -34,6 +43,10 @@
 | created_at      | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP                       |
 | updated_at      | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
 
+---
+- 🔑 **PK:** `id`
+- 📌 Contiene los roles del sistema (admin, user, etc.).
+- ⚡ Sin llaves foráneas.
 ---
 
 ### Tabla `payment_types`
@@ -47,7 +60,10 @@
 | deleted_at    | TIMESTAMP       | NULL                                         |
 
 ---
-
+- 🔑 **PK:** `id`
+- 📌 Lista de **tipos de pago** (efectivo, tarjeta, transferencia).
+- ⚡ Sin llaves foráneas.
+---
 ### Tabla `countries`
 
 |   Atributos   |   Tipo de Dato  |              Restricciones                   |
@@ -61,6 +77,11 @@
 | deleted_at    | TIMESTAMP       | NULL                                         |
 
 ---
+- 🔑 **PK:** `id`
+- 📌 Lista de **países**.
+- 📌 Campos relevantes: `ISO2`, `phone_code`.
+- ⚡ Sin llaves foráneas.
+---
 
 ### Tabla `document_types`
 
@@ -73,7 +94,10 @@
 | updated_at    | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
 | deleted_at    | TIMESTAMP       | NULL                                         |
 
-
+---
+- 🔑 **PK:** `id`
+- 📌 Catálogo de **tipos de documentos** (DNI, pasaporte, etc.).
+- ⚡ Sin llaves foráneas.
 ---
 
 ### Tabla `diagnoses`
@@ -89,6 +113,11 @@
 | deleted_at    | TIMESTAMP       | NULL                                         |
 
 ---
+- 🔑 **PK:** `id`
+- 📌 Catálogo de **diagnósticos médicos**.
+- 🔐 Campo único: `code`.
+- ⚡ Sin llaves foráneas.
+---
 
 ### Tabla `predetermined_prices`
 
@@ -102,5 +131,7 @@
 | deleted_at    | TIMESTAMP       | NULL                                         |
 
 ---
-
-
+- 🔑 **PK:** `id`
+- 📌 Define precios predeterminados para servicios.
+- ⚡ Sin llaves foráneas.
+---

@@ -1,3 +1,10 @@
+# 🔗 Tablas Dependientes
+
+Estas tablas dependen de otras entidades mediante **llaves foráneas**.  
+Definen relaciones y estructuras clave del sistema.
+
+---
+
 ### Tabla `users`
 
 |   Atributos        |   Tipo de Dato  |              Restricciones                   |
@@ -25,6 +32,15 @@
 | deleted_at         | TIMESTAMP       | NULL                                         |
 
 ---
+- 🔑 **PK:** `id`
+- 🔗 **FKs:**
+  - `document_type_id` → `document_types(id)`
+  - `country_id` → `countries(id)`
+- 📌 Restricciones:
+  - `document_number`, `email`, `user_name` son **únicos**.
+  - `sex` → CHECK(`M`, `F`)
+  - `account_statement` → CHECK(`A`, `I`)
+---
 
 ### Tabla `users_verification_codes`
 
@@ -39,6 +55,11 @@
 | created_at         | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP                    |
 | updated_at         | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  |
 
+---
+
+- 🔑 **PK:** `id`
+- 🔗 **FK:** `user_id` → `users(id)` (**1:1** relación).
+- 📌 Maneja códigos de verificación, expiración y bloqueos.
 
 ---
 
@@ -66,6 +87,15 @@
 | created_at             | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP                    |
 | updated_at             | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
 | deleted_at             | TIMESTAMP       | NULL                                         |
+
+---
+
+- 🔑 **PK:** `id`
+- 🔗 **FKs:**
+  - `document_type_id` → `document_types(id)`
+  - `region_id` → `regions(id)`
+  - `province_id` → `provinces(id)`
+  - `district_id` → `districts(id)`
 
 ---
 
@@ -99,6 +129,16 @@
 
 ---
 
+- 🔑 **PK:** `id`
+- 🔗 **FKs:**
+  - `document_type_id` → `document_types(id)`
+  - `country_id` → `countries(id)`
+  - `region_id` → `regions(id)`
+  - `province_id` → `provinces(id)`
+  - `district_id` → `districts(id)`
+
+---
+
 ### Tabla `medical_records`
 |   Atributos     |   Tipo de Dato  |              Restricciones                   |
 |-----------------|-----------------|----------------------------------------------|
@@ -113,6 +153,14 @@
 | created_at      | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP                    |
 | updated_at      | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
 | deleted_at      | TIMESTAMP       | NULL                                         |
+
+---
+
+- 🔑 **PK:** `id`
+- 🔗 **FKs:**
+  - `patient_id` → `patients(id)`
+  - `diagnoses_id` → `diagnoses(id)`
+- 📌 Relación **1:N** (un paciente puede tener varios registros médicos).
 
 ---
 
@@ -145,6 +193,17 @@
 | updated_at              | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
 | delete_at               | TIMESTAMP       | NULL                                         |
 | is_active               | TINYINT(1)      | NOT NULL, DEFAULT 1                          |
+
+---
+
+- 🔑 **PK:** `id`
+- 🔗 **FKs:**
+  - `patients_id` → `patients(id)`
+  - `therapists_id` → `therapists(id)`
+  - `appointment_status_id` → `appointment_statuses(id)`
+  - `payment_types_id` → `payment_types(id)`
+- 📌 Relación central entre pacientes, terapeutas y pagos.
+
 ---
 
 ### Tabla `provinces`
@@ -157,6 +216,12 @@
 | created_at    | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP                    |
 | updated_at    | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
 | deleted_at    | TIMESTAMP       | NULL                                         |
+
+---
+
+- 🔑 **PK:** `id`
+- 🔗 **FK:** `region_id` → `regions(id)`  
+  *(con ON DELETE/UPDATE CASCADE)*
 
 ---
 
@@ -174,6 +239,12 @@
 
 ---
 
+- 🔑 **PK:** `id`
+- 🔗 **FK:** `province_id` → `provinces(id)`  
+  *(con ON DELETE/UPDATE CASCADE)*
+
+---
+
 ### Tabla `regions`
 
 |   Atributos   |   Tipo de Dato  |              Restricciones                   |
@@ -185,6 +256,11 @@
 | updated_at    | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
 | deleted_at    | TIMESTAMP       | NULL                                         |
 
+---
+
+- 🔑 **PK:** `id`
+- 🔗 **FK:** `country_id` → `countries(id)`  
+  *(con ON DELETE/UPDATE CASCADE)*
 
 ---
 
@@ -203,6 +279,14 @@
 | created_at        | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP                    |
 | updated_at        | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
 | is_active         | TINYINT(1)      | NOT NULL, DEFAULT 1                          |
+
+---
+
+- 🔑 **PK:** `id`
+- 🔗 **FKs:**
+  - `appointment_id` → `appointments(id)`
+  - `payment_types_id` → `payment_types(id)`
+- 🔐 Campo único: `ticket_number`
 
 ---
 
@@ -225,6 +309,12 @@
 
 ---
 
+- 🔑 **PK:** `id`
+- 🔗 **FK:** `document_types_id` → `document_types(id)`
+- 📌 Guarda historial clínico general de pacientes.
+
+---
+
 ### Tabla `role_has_permissions`
 |   Atributos     |   Tipo de Dato  |              Restricciones                      |
 |-----------------|-----------------|-------------------------------------------------|
@@ -234,6 +324,14 @@
 | created_at      | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP                       |
 | updated_at      | TIMESTAMP       | DEFAULT CURRENT_TIMESTAMP, ON UPDATE CURRENT_TIMESTAMP |
 | updated_at      | TIMESTAMP       | NULL                                            |
+
+---
+
+- 🔑 **PK Compuesta:** (`permissions_id`, `roles_id`)
+- 🔗 **FKs:**
+  - `permissions_id` → `permissions(id)`
+  - `roles_id` → `roles(id)`
+- 📌 Define relación **N:M** entre `roles` y `permissions`.
 
 ---
 
